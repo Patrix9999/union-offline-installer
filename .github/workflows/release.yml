@@ -1,0 +1,46 @@
+name: "Union Offline Installer CI/CD"
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  installer:
+    runs-on: windows-latest
+
+    env:
+      installer_name: union-1.0m
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create installer
+        if: ${{ github.event_name == 'release' }}
+        run: |
+          choco install nsis
+          $env:Path += ";C:\Program Files (x86)\NSIS"
+          
+          makensis /DINSTALLER_NAME=${{ env.installer_name }} installer.nsi
+
+          $installer = "${{ env.installer_name }}.exe"
+          echo "installer=$installer" >> $env:GITHUB_ENV
+
+      - name: Upload installer (release)
+        if: ${{ github.event_name == 'release' }}
+        uses: softprops/action-gh-release@v2.2.1
+        with:
+          files: |
+            ${{ env.installer }}
+
+      - name: Upload installer (manual trigger)
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        uses: actions/upload-artifact@v4
+        with:
+            name: union-offline-installer
+            path: |
+                ${{ env.installer }}
