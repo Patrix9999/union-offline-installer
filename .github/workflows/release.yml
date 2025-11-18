@@ -18,9 +18,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          lfs: true
 
       - name: Create installer
-        if: ${{ github.event_name == 'release' }}
         run: |
           choco install nsis
           $env:Path += ";C:\Program Files (x86)\NSIS"
