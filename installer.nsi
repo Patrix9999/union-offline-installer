@@ -103,6 +103,7 @@ Section "Gothic 1 Classic" SectionG1
   SetOutPath "$INSTDIR"
 
   Call BackupGameFiles
+  Call BackupG1Files
 
   File /r "files\g1\*.*"
   File /r "files\union\*.*"
@@ -174,6 +175,15 @@ Function BackupGameFiles
   ${If} ${FileExists} "$INSTDIR\System\SystemPack.ini"
     CopyFiles /SILENT "$INSTDIR\System\SystemPack.ini" "$INSTDIR\.backup_union\SystemPack.ini"
   ${EndIf}
+FunctionEnd
+
+Function BackupG1Files
+
+  ;Backup binkw32.dll file if present
+  ${If} ${FileExists} "$INSTDIR\System\binkw32.dll"
+    CopyFiles /SILENT "$INSTDIR\System\binkw32.dll" "$INSTDIR\.backup_union\binkw32.dll"
+  ${EndIf}
+
 FunctionEnd
 
 ;--------------------------------
