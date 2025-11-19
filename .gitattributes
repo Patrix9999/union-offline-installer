@@ -1,3 +1,4 @@
 *.dll filter=lfs diff=lfs merge=lfs -text
 *.vdf filter=lfs diff=lfs merge=lfs -text
 *.bmp filter=lfs diff=lfs merge=lfs -text
+*.gif filter=lfs diff=lfs merge=lfs -text
